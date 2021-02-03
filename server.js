@@ -1,8 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+require('dotenv').config();
 
+const todoController = require('./controllers/todo');
+const authController = require('./controllers/auth');
 require('./config/db');
-const Todo = require('./models/todoModel')
+const models = require('./models')
 
 const port = process.env.PORT || 3000;
 
@@ -11,50 +16,13 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/todos', (req, res) => {
-    let allTodos = Todo.find({}, (err, result) => {
-        if (err){
-            res.status(500).send(err);
-        }
-        res.status(200).send(result);
-    });
-});
+app.get('/todos', todoController.allTodos);
+app.get('/todos/:id', todoController.singleTodo);
+app.delete('/todos/:id', todoController.deleteTodo);
+app.put('/todos/:id', todoController.updatedTodo);
+app.post('/todos', todoController.newTodo);
 
-app.get('/todos/:id', (req, res) => {
-    let singleTodo = Todo.findById(req.params.id, (err, result) => {
-        if (err){
-            res.status(500).send(err);
-        }
-        res.status(200).send(result);
-    });
-});
-
-app.delete('/todos/:id', (req, res) => {
-    let deleteTodo = Todo.findByIdAndDelete(req.params.id, (err, result) => {
-    if (err){
-        res.status(404).send(err);
-    }
-    res.status(200).send({ message: 'Deleted'});
-    });
-});
-
-app.put('/todos/:id', (req, res) => {
-    let newTodo = Todo.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, result) => {
-    if (err){
-        res.status(500).send(err);
-    }
-    res.status(200).send(result);
-    });
-});
-
-app.post('/todos', (req, res) => {
-    let newTodo = new Todo (req.body)
-    newTodo.save((err, result) => {
-        if (err) {
-            res.status(500).send(err);
-        }
-        res.status(201).send(result);
-    });
-});
+app.post('/auth/signup', authController.signUp);
+app.post('/auth/signin', authController.signIn);
 
 app.listen(port, () => console.log (`Server running at http://localhost:${port}`))
