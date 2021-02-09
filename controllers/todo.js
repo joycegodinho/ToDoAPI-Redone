@@ -5,7 +5,7 @@ exports.allTodos = (req, res) => {
         if (err){
             res.status(500).send(err);
         }
-        res.status(200).send(result);
+        res.status(200).json(result);
     });
 };
 
@@ -14,7 +14,7 @@ exports.singleTodo = (req, res) => {
         if (err){
             res.status(500).send(err);
         }
-        res.status(200).send(result);
+        res.status(200).json(result);
     });
 };
 
@@ -23,7 +23,7 @@ exports.deleteTodo = (req, res) => {
     if (err){
         res.status(404).send(err);
     }
-    res.status(200).send({ message: 'Deleted'});
+    res.status(200).json({ message: 'Deleted'});
     });
 };
 
@@ -32,7 +32,7 @@ exports.updatedTodo = (req, res) => {
     if (err){
         res.status(500).send(err);
     }
-    res.status(200).send(result);
+    res.status(200).json(result);
     });
 };
 
@@ -42,6 +42,6 @@ exports.newTodo = (req, res) => {
         if (err) {
             res.status(500).send(err);
         }
-        res.status(201).send(result);
+        res.status(201).json(result);
     });
 };

@@ -14,7 +14,7 @@ exports.signUp = async (req, res) => {
         if (err) {
             res.status(500).send(err);
         }
-        res.status(201).send(result);
+        res.status(201).json(result);
     });
 
 };
@@ -30,7 +30,7 @@ exports.signIn =  async (req, res) => {
             res.status(500).json({ message: "Wrong password"});
 
         };
-        res.send(jwt.sign({ _id: user._id }, process.env.JWT_SECRET));
+        res.json({ token: jwt.sign({ _id: user._id }, process.env.JWT_SECRET) });
         
 };
 
@@ -45,6 +45,7 @@ exports.authRequired = async (req, res, next) => {
                 res.status(401).json({ message: "Unauthorized user"})
             }else {
                 req.user = result;
+                //res.status(200).json({ message: "Authorized user"});
                 next();
                 //res.json({ message: "Authorized user"});      
             }
