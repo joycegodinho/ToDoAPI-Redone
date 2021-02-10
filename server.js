@@ -16,21 +16,13 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-/*
-app.get('/todos', todoController.allTodos);
-app.get('/todos/:id', todoController.singleTodo);
-app.delete('/todos/:id', todoController.deleteTodo);
-app.put('/todos/:id',  todoController.updatedTodo);
-app.post('/todos', todoController.newTodo);
-*/
-
 app.post('/auth/signup', authController.signUp);
 app.post('/auth/signin', authController.signIn);
 
 app.get('/todos', todoController.allTodos);
 app.get('/todos/:id', todoController.singleTodo);
 app.delete('/todos/:id', authController.authRequired, todoController.deleteTodo);
-app.put('/todos/:id',  authController.authRequired, todoController.updatedTodo);
+app.put('/todos/:id', authController.authRequired, todoController.updatedTodo);
 app.post('/todos', authController.authRequired, todoController.newTodo);
 
 module.exports = app.listen(port, () => console.log (`Server running at http://localhost:${port}`))

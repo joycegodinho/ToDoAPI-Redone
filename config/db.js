@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
 var url = 'mongodb://localhost:27017/todo';
+//var url = 'mongodb://localhost:27017/todotest';
 
 const options = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+
 };
 
 const db = mongoose.connect(url, options)
